@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ASCII Art Generator</title>
+    <style>
+      body {
+        font-family: "Courier New", monospace;
+        background-color: #000;
+        color: #0f0;
+        margin: 0;
+        padding: 20px;
+        min-height: 100vh;
+      }
+
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #111;
+        border: 3px solid #0f0;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+      }
+
+      h1 {
+        text-align: center;
+        color: #0f0;
+        margin-bottom: 30px;
+        text-shadow: 0 0 10px #0f0;
+      }
+
+      .text-input-container {
+        margin-bottom: 10px;
+      }
+      .input-label {
+        margin-bottom: 10px;
+        font-size: 18px;
+        font-weight: bold;
+        color: #8f8;
+      }
+
+      .text-input {
+        width: 90%;
+        height: 150px;
+        padding: 15px;
+        background-color: #002200;
+        color: #ffffff;
+        border: 3px solid #00ff00;
+        border-radius: 8px;
+        font-size: 18px;
+        font-weight: bold;
+        resize: vertical;
+        outline: none;
+        box-shadow: 0 0 20px #00ff00, inset 0 0 15px rgba(0, 255, 0, 0.3);
+      }
+
+      .text-input:focus {
+        background-color: #003300;
+        box-shadow: 0 0 30px #00ff00, inset 0 0 20px rgba(0, 255, 0, 0.5);
+      }
+
+      .radio-container {
+        margin-top: 20px;
+        margin-bottom: 30px;
+      }
+
+      .radio-label {
+        display: block;
+        margin-bottom: 10px;
+        font-size: 18px;
+        font-weight: bold;
+        color: #8f8;
+      }
+
+      .radio-group {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+      }
+
+      .radio-option {
+        position: relative;
+      }
+
+      .radio-option input[type="radio"] {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+      }
+
+      .radio-btn-label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 20px;
+        background-color: #002200;
+        border: 2px solid #0a0;
+        border-radius: 5px;
+        color: #8f8;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-size: 16px;
+      }
+
+      .radio-btn-label:hover {
+        background-color: #003300;
+        border-color: #0f0;
+      }
+
+      .radio-option input[type="radio"]:checked + .radio-btn-label {
+        background-color: #004400;
+        border-color: #0f0;
+        color: #0f0;
+        box-shadow: 0 0 10px #0f0;
+      }
+
+      .radio-dot {
+        width: 12px;
+        height: 12px;
+        background-color: #0a0;
+        border-radius: 50%;
+      }
+      .radio-option input[type="radio"]:checked + .radio-btn-label .radio-dot {
+        background-color: #0f0;
+        box-shadow: 0 0 5px #0f0;
+      }
+
+      .radio-option input[type="radio"]:checked + .radio-btn-label .radio-dot {
+        background-color: #0f0;
+        box-shadow: 0 0 5px #0f0;
+      }
+
+      .submit-btn {
+        display: block;
+        width: 100%;
+        padding: 15px;
+        background: linear-gradient(45deg, #002200, #004400);
+        border: 3px solid #0f0;
+        border-radius: 8px;
+        color: #0f0;
+        font-size: 18px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      .submit-btn:hover {
+        background: linear-gradient(45deg, #003300, #005500);
+        box-shadow: 0 0 20px #0f0;
+        transform: translateY(-2px);
+      }
+
+      .submit-btn:active {
+        transform: translateY(0)             
+      }
+
+      .result-container {
+        margin-top: 30px;
+        padding: 20px;
+        background-color: #000;
+        border: 2px solid #0f0;
+        border-radius: 8px;
+      }
+
+      .result-title {
+        color: #0f0;
+        margin-bottom: 15px;
+        font-size: 20px;
+        text-align: center;
+      }
+
+      .ascii-output {
+        background-color: #000;
+        color: #fff;
+        font-size: 14px;
+        white-space: pre;
+        padding: 15px;
+        border: 1px solid #333;
+        min-height: 100px;
+
+        overflow-x:auto;
+      }
+
+      .error {
+        background-color: #220000;
+        border: 2px solid #f00;
+        color: #f88;
+        padding: 15px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+        animation: errorFlash  1s infinite;
+      }
+
+      @keyframes errorFlash {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.8;
+        }
+      }
+
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>ASCII ART GENERATOR</h1>
+
+      {{if .Error}}
+      <div class="error">ERROR: {{.Error}}</div>
+      {{end}}
+
+      
+      <form method="POST" action="/ascii-art">
+        <div class="text-input-container">
+          <label class="input-label">ENTER YOUR TEXT:</label>
+
+         <textarea name="text" class="text-input" placeholder="Type text...">{{.Text}}</textarea>
+        </div>
+        </div>
+
+        <div class="radio-container">
+          <label class="radio-label">SELECT BANNER STYLE:</label>
+          <div class="radio-group">
+            <div class="radio-option">
+              <input type="radio" id="standard" name="banner" value="standard"
+              {{if or (eq .Banner "standard") (not .Banner)}}checked{{end}}>
+              <label for="standard" class="radio-btn-label">
+                <span class="radio-dot"></span> STANDARD
+              </label>
+            </div>
+
+            <div class="radio-option">
+              <input type="radio" id="shadow" name="banner" value="shadow" 
+              {{if eq .Banner "shadow"}} checked{{end}}>
+              <label for="shadow" class="radio-btn-label">
+                <span class="radio-dot"></span> SHADOW
+              </label>
+            </div>
+
+            <div class="radio-option">
+              <input type="radio" id="thinkertoy" name="banner" value="thinkertoy" 
+              {{if eq .Banner "thinkertoy"}} checked{{end}}>
+              <label for="thinkertoy" class="radio-btn-label">
+                <span class="radio-dot"></span> THINKERTOY
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" class="submit-btn">GENERATE ASCII ART</button>
+      </form>
+
+      {{if .Content}}
+      <div class="result-container">
+        <div class="result-title">ASCII ART RESULT:</div>
+        <pre class="ascii-output">{{.Content}}</pre>
+      </div>
+      {{end}}
+    </div>
+  </body>
+</html>
