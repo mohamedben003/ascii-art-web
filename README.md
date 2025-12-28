@@ -149,9 +149,75 @@ Client Request → Server Routing → Handler Function → Process Data → Gene
 - **HTML/CSS**: Frontend interface
 - **Go Templates**: Dynamic page rendering
 - **HTTP**: Client-server communication
+#
+# ASCII Art Web - Docker
 
-## Notes
-- All packages used are from the Go standard library
-- Banner files must be present for the application to work
-- The server runs on port 8080 by default
-- Input is limited to printable ASCII characters (32-126)
+A web application that generates ASCII art from text using different banner styles.
+
+## Prerequisites
+
+- Docker installed on your machine
+
+## Quick Start
+
+```bash
+# Build the image
+docker build -t ascii-art-web .
+
+# Run the container
+docker run -p 8080:8080 ascii-art-web
+
+# Open browser at: http://localhost:8080
+```
+
+## Common Commands
+
+```bash
+# Run in background
+docker run -d --name ascii-app -p 8080:8080 ascii-art-web
+
+# View running containers
+docker ps
+
+# Stop container
+docker stop ascii-app
+
+# Start container
+docker start ascii-app
+
+# View logs
+docker logs ascii-app
+
+# Remove container
+docker rm ascii-app
+```
+
+## Cleanup
+
+```bash
+# Remove unused containers and images
+docker system prune
+```
+
+## Project Structure
+
+```
+.
+├── Dockerfile
+├── main.go
+├── helper/
+│   └── *.txt (banner files)
+└── templates/
+    └── index.html
+```
+
+## Troubleshooting
+
+**Port 8080 in use?**
+```bash
+docker run -p 8081:8080 ascii-art-web
+```
+
+---
+
+**Made with Docker 🐳**
